@@ -308,7 +308,7 @@ function IssueCard({
 }) {
   const borderColor = severity === "red" ? "bg-[#dc2626]" : severity === "yellow" ? "bg-[#eab308]" : null;
   return (
-    <div className={`bg-white border border-[#d4d4d4] rounded-xl flex overflow-hidden w-full transition-colors duration-150 cursor-pointer${noCardHover ? "" : " hover:bg-[#F5F5F5]"}`}>
+    <div className={`bg-white border border-[#e5e5e5] rounded-xl flex overflow-hidden w-full transition-colors duration-150 cursor-pointer${noCardHover ? "" : " hover:bg-[#F5F5F5]"}`}>
       {borderColor && <div className={`w-1.5 shrink-0 ${borderColor}`} />}
       <div className="flex-1 p-5 flex flex-col gap-4 min-w-0">
         <div className="flex flex-col gap-1">
@@ -364,7 +364,7 @@ function PayRunStep({ label, sublabel, active, isLast }: { label: string; sublab
   return (
     <div className="flex items-start gap-3">
       <div className="flex flex-col items-center shrink-0 w-[18px] self-stretch">
-        <div className="mt-[3px] shrink-0">
+        <div className="shrink-0">
           {active ? (
             <div className="w-[18px] h-[18px] rounded-full border-2 border-[#f77445] flex items-center justify-center">
               <div className="w-2.5 h-2.5 rounded-full bg-[#f77445]" />
@@ -373,7 +373,7 @@ function PayRunStep({ label, sublabel, active, isLast }: { label: string; sublab
             <div className="w-[18px] h-[18px] rounded-full border border-[#a3a3a3] bg-white" />
           )}
         </div>
-        {!isLast && <div className="w-px bg-[#d4d4d4] flex-1 mt-1" />}
+        {!isLast && <div className="w-px bg-[#d4d4d4] flex-1" />}
       </div>
       <div className={`flex flex-col min-w-0 ${!isLast ? "pb-4" : ""}`}>
         <span className={`text-[14px] font-medium leading-5 tracking-[0.3px] ${active ? "text-[#171717]" : "text-[#737373]"}`}>{label}</span>
