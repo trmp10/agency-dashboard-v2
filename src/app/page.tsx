@@ -192,9 +192,7 @@ type NavItemProps = {
 function NavItem({ icon, label, active, badge }: NavItemProps) {
   return (
     <div className={`flex items-center h-10 rounded-lg w-full px-2 cursor-pointer gap-0 ${active ? "bg-[#262626]" : "hover:bg-[#262626]/60"}`}>
-      <span className="w-8 h-10 flex items-center justify-center shrink-0 text-[#737373]">
-        {icon}
-      </span>
+      {icon && <span className="w-8 h-10 flex items-center justify-center shrink-0 text-[#737373]">{icon}</span>}
       <span className={`text-[14px] tracking-[0.3px] flex-1 ${active ? "font-semibold text-[#f77445]" : "font-medium text-white"}`}>{label}</span>
       {badge !== undefined && <NavBadge count={badge} />}
     </div>
@@ -222,22 +220,11 @@ function Sidebar() {
           <span className="text-[18px] font-bold text-white leading-none">P</span>
         </div>
         <span className="text-[18px] font-semibold text-white flex-1 leading-6 tracking-[0.2px]">Payroll</span>
-        <button className="p-1.5 text-[#737373] hover:text-white shrink-0">
-          <svg viewBox="0 0 20 20" fill="none" className="w-5 h-5">
-            <rect x="2" y="3" width="16" height="14" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
-            <path d="M7 3v14" stroke="currentColor" strokeWidth="1.5" />
-          </svg>
-        </button>
       </div>
 
       {/* Nav */}
       <div className="flex flex-col px-3 flex-1 pb-2">
-        <NavItem icon={<IconHome className="w-5 h-5" />} label="Dashboard" active />
-      </div>
-
-      {/* Settings */}
-      <div className="border-t border-[#525252] px-3 py-2 shrink-0">
-        <NavItem icon={<IconSignOut className="w-5 h-5" />} label="Sign out" />
+        <NavItem icon={null} label="Dashboard" active />
       </div>
 
       {/* Version */}
