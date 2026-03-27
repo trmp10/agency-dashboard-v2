@@ -482,7 +482,7 @@ export default function Dashboard() {
                   title="Compliance flags"
                   tag="19 flags"
                   tagColor="yellow"
-                  description="Compliance issues found. Action required to avoid claims and penalties."
+                  description="Action required to avoid claims and penalties."
                   noCardHover
                 >
                   <div className="flex flex-col gap-0">
