@@ -231,54 +231,8 @@ function Sidebar() {
       </div>
 
       {/* Nav */}
-      <div className="flex flex-col px-3 flex-1 gap-8 pb-2">
-        {/* Dashboard group */}
-        <div className="flex flex-col">
-          <NavItem icon={<IconHome className="w-5 h-5" />} label="Dashboard" active />
-          <NavNestedItem label="Overview" />
-        </div>
-
-        {/* Operations */}
-        <div className="flex flex-col">
-          <NavSectionLabel label="Operations" />
-          <NavItem icon={<IconExclamation className="w-5 h-5" />} label="Action lists" />
-          <NavItem icon={<IconUsers className="w-5 h-5" />} label="Employees" badge={2} />
-          <NavItem icon={<IconBuilding className="w-5 h-5" />} label="Agencies" />
-          <NavItem icon={<IconMail className="w-5 h-5" />} label="Secure mailbox" />
-          <NavItem icon={<IconChat className="w-5 h-5" />} label="Communications" />
-          <NavItem icon={<IconShield className="w-5 h-5" />} label="Compliance" />
-        </div>
-
-        {/* Payroll / Accounts */}
-        <div className="flex flex-col">
-          <NavSectionLabel label="Payroll / Accounts" />
-          <NavItem icon={<IconReceipt className="w-5 h-5" />} label="Invoices" />
-          <NavItem icon={<IconCard className="w-5 h-5" />} label="Expenses" />
-          <NavItem icon={<IconDocument className="w-5 h-5" />} label="Statutory payments" />
-          <NavNestedItem label="Manage pensions" badge={4} />
-        </div>
-
-        {/* Imports and Reports */}
-        <div className="flex flex-col">
-          <NavSectionLabel label="Imports and Reports" />
-          <NavNestedItem label="Imports" badge={5} />
-          <NavItem icon={<IconCalculator className="w-5 h-5" />} label="Bulk processing" />
-          <NavItem icon={<IconDocument className="w-5 h-5" />} label="Reports" />
-        </div>
-
-        {/* Tools */}
-        <div className="flex flex-col">
-          <NavSectionLabel label="Tools" />
-          <NavItem icon={<IconCalculator className="w-5 h-5" />} label="Pay calculator" />
-          <NavItem icon={<IconCalendar className="w-5 h-5" />} label="Tax calendar" />
-        </div>
-
-        {/* Other */}
-        <div className="flex flex-col">
-          <NavSectionLabel label="Other" />
-          <NavNestedItem label="Manage prospects" />
-          <NavNestedItem label="Consultants" />
-        </div>
+      <div className="flex flex-col px-3 flex-1 pb-2">
+        <NavItem icon={<IconHome className="w-5 h-5" />} label="Dashboard" active />
       </div>
 
       {/* Settings */}
