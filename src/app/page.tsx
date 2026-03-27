@@ -135,17 +135,18 @@ function IconUserPlus({ className }: { className?: string }) {
     </svg>
   );
 }
+function IconUser({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 20 20" fill="none">
+      <circle cx="10" cy="7" r="3.5" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M3 18c0-3.5 3-6 7-6s7 2.5 7 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
 function IconChevronDown({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 20 20" fill="none">
       <path d="M5 7.5l5 5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-function IconCollapse({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 20 20" fill="none">
-      <path d="M13 4l-6 6 6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -156,19 +157,28 @@ function IconSignOut({ className }: { className?: string }) {
     </svg>
   );
 }
+function IconArrowRight({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 16 16" fill="none">
+      <path d="M3 8h10M9 4.5l4 3.5-4 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+/* ─── Sidebar ─────────────────────────────────────────── */
 
 function NavBadge({ count }: { count: number }) {
   return (
     <div className="flex items-center justify-center w-[18px] h-[18px] rounded-full bg-[#f77445] shrink-0">
-      <span className="text-[11px] font-semibold text-white leading-none">{count}</span>
+      <span className="text-[12px] font-semibold text-white leading-none">{count}</span>
     </div>
   );
 }
 
 function NavSectionLabel({ label }: { label: string }) {
   return (
-    <div className="px-2 h-8 flex items-center">
-      <span className="text-[11px] font-semibold uppercase tracking-[0.3px] text-[#a3a3a3]">{label}</span>
+    <div className="h-8 flex items-center px-2">
+      <span className="text-[12px] font-semibold uppercase tracking-[0.3px] text-[#a3a3a3]">{label}</span>
     </div>
   );
 }
@@ -181,36 +191,37 @@ type NavItemProps = {
 };
 function NavItem({ icon, label, active, badge }: NavItemProps) {
   return (
-    <div className={`flex items-center h-10 rounded-lg w-full px-2 cursor-pointer ${active ? "bg-[#262626]" : "hover:bg-[#262626]/60"}`}>
-      <span className={`text-[13px] tracking-[0.3px] flex-1 ${active ? "font-semibold text-[#f77445]" : "font-medium text-white"}`}>{label}</span>
+    <div className={`flex items-center h-10 rounded-lg w-full px-2 cursor-pointer gap-0 ${active ? "bg-[#262626]" : "hover:bg-[#262626]/60"}`}>
+      <span className="w-8 h-10 flex items-center justify-center shrink-0 text-[#737373]">
+        {icon}
+      </span>
+      <span className={`text-[14px] tracking-[0.3px] flex-1 ${active ? "font-semibold text-[#f77445]" : "font-medium text-white"}`}>{label}</span>
       {badge !== undefined && <NavBadge count={badge} />}
     </div>
   );
 }
 
-function NestedNavItem({ label }: { label: string }) {
+function NavNestedItem({ label, badge }: { label: string; badge?: number }) {
   return (
     <div className="flex items-center h-10 rounded-lg w-full cursor-pointer hover:bg-[#262626]/60">
       <span className="w-8 h-10 flex items-center justify-center shrink-0 text-[#737373]">
         <IconChevronDown className="w-4 h-4" />
       </span>
-      <span className="text-[13px] font-medium text-white tracking-[0.3px]">{label}</span>
+      <span className="text-[14px] font-medium text-white tracking-[0.3px] flex-1">{label}</span>
+      {badge !== undefined && <NavBadge count={badge} />}
     </div>
   );
 }
 
 function Sidebar() {
   return (
-    <div className="fixed top-0 left-0 bottom-0 w-60 bg-[#171717] flex flex-col z-20">
-      {/* Sidebar header — 72px, p-4, gap-2 — matches Figma node I136:1403;5903:80045 */}
+    <div className="fixed top-0 left-0 bottom-0 w-60 bg-[#171717] flex flex-col z-20 overflow-y-auto">
+      {/* Header */}
       <div className="flex items-center gap-2 h-[72px] p-4 shrink-0">
-        {/* LogoMark — 32px coral rounded square with "P" */}
         <div className="w-8 h-8 rounded-[4px] bg-[#ff885d] flex items-center justify-center shrink-0">
           <span className="text-[18px] font-bold text-white leading-none">P</span>
         </div>
-        {/* "Payroll" — 18px semibold white */}
         <span className="text-[18px] font-semibold text-white flex-1 leading-6 tracking-[0.2px]">Payroll</span>
-        {/* Collapse / layout toggle icon */}
         <button className="p-1.5 text-[#737373] hover:text-white shrink-0">
           <svg viewBox="0 0 20 20" fill="none" className="w-5 h-5">
             <rect x="2" y="3" width="16" height="14" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
@@ -219,25 +230,73 @@ function Sidebar() {
         </button>
       </div>
 
-      {/* Nav — Dashboard only */}
-      <div className="flex flex-col px-3 flex-1">
-        <NavItem icon={<IconHome className="w-5 h-5" />} label="Dashboard" active />
+      {/* Nav */}
+      <div className="flex flex-col px-3 flex-1 gap-8 pb-2">
+        {/* Dashboard group */}
+        <div className="flex flex-col">
+          <NavItem icon={<IconHome className="w-5 h-5" />} label="Dashboard" active />
+          <NavNestedItem label="Overview" />
+        </div>
+
+        {/* Operations */}
+        <div className="flex flex-col">
+          <NavSectionLabel label="Operations" />
+          <NavItem icon={<IconExclamation className="w-5 h-5" />} label="Action lists" />
+          <NavItem icon={<IconUsers className="w-5 h-5" />} label="Employees" badge={2} />
+          <NavItem icon={<IconBuilding className="w-5 h-5" />} label="Agencies" />
+          <NavItem icon={<IconMail className="w-5 h-5" />} label="Secure mailbox" />
+          <NavItem icon={<IconChat className="w-5 h-5" />} label="Communications" />
+          <NavItem icon={<IconShield className="w-5 h-5" />} label="Compliance" />
+        </div>
+
+        {/* Payroll / Accounts */}
+        <div className="flex flex-col">
+          <NavSectionLabel label="Payroll / Accounts" />
+          <NavItem icon={<IconReceipt className="w-5 h-5" />} label="Invoices" />
+          <NavItem icon={<IconCard className="w-5 h-5" />} label="Expenses" />
+          <NavItem icon={<IconDocument className="w-5 h-5" />} label="Statutory payments" />
+          <NavNestedItem label="Manage pensions" badge={4} />
+        </div>
+
+        {/* Imports and Reports */}
+        <div className="flex flex-col">
+          <NavSectionLabel label="Imports and Reports" />
+          <NavNestedItem label="Imports" badge={5} />
+          <NavItem icon={<IconCalculator className="w-5 h-5" />} label="Bulk processing" />
+          <NavItem icon={<IconDocument className="w-5 h-5" />} label="Reports" />
+        </div>
+
+        {/* Tools */}
+        <div className="flex flex-col">
+          <NavSectionLabel label="Tools" />
+          <NavItem icon={<IconCalculator className="w-5 h-5" />} label="Pay calculator" />
+          <NavItem icon={<IconCalendar className="w-5 h-5" />} label="Tax calendar" />
+        </div>
+
+        {/* Other */}
+        <div className="flex flex-col">
+          <NavSectionLabel label="Other" />
+          <NavNestedItem label="Manage prospects" />
+          <NavNestedItem label="Consultants" />
+        </div>
       </div>
 
-      {/* Settings — border-t #525252, py-2 px-3 */}
+      {/* Settings */}
       <div className="border-t border-[#525252] px-3 py-2 shrink-0">
         <NavItem icon={<IconSignOut className="w-5 h-5" />} label="Sign out" />
       </div>
 
-      {/* Version — 64px, centered, uppercase 12px semibold #a3a3a3 */}
+      {/* Version */}
       <div className="flex items-center justify-center h-16 px-4 py-2 shrink-0">
-        <span className="text-[11px] font-semibold uppercase tracking-[0.3px] text-[#a3a3a3]">
+        <span className="text-[12px] font-semibold uppercase tracking-[0.3px] text-[#a3a3a3]">
           Finity Payroll 4.6.424
         </span>
       </div>
     </div>
   );
 }
+
+/* ─── Header ──────────────────────────────────────────── */
 
 function Header() {
   return (
@@ -252,11 +311,13 @@ function Header() {
   );
 }
 
+/* ─── KPI Card ────────────────────────────────────────── */
+
 function KpiCard({ label, value, children }: { label: string; value?: string; children?: React.ReactNode }) {
   return (
-    <div className="flex-1 bg-white border border-[#e5e5e5] rounded-xl p-5 flex flex-col gap-0.5 min-w-0">
-      <span className="text-[11px] font-semibold uppercase tracking-[0.3px] text-[#737373] leading-4">{label}</span>
-      {value && <span className="text-[20px] font-semibold text-[#171717] tracking-[0.2px] leading-7">{value}</span>}
+    <div className="flex-1 bg-white border border-[#e5e5e5] rounded-xl p-4 flex flex-col gap-1 min-w-0">
+      <span className="text-[12px] font-semibold uppercase tracking-[0.3px] text-[#737373] leading-4">{label}</span>
+      {value && <span className="text-[24px] font-bold text-[#171717] tracking-[0.2px] leading-8">{value}</span>}
       {children}
     </div>
   );
@@ -268,6 +329,8 @@ function StatusDot({ color }: { color: "amber" | "green" }) {
   );
 }
 
+/* ─── Tag ─────────────────────────────────────────────── */
+
 type TagColor = "red" | "yellow" | "teal";
 function Tag({ label, color }: { label: string; color: TagColor }) {
   const styles: Record<TagColor, string> = {
@@ -276,11 +339,13 @@ function Tag({ label, color }: { label: string; color: TagColor }) {
     teal: "bg-[#d9eeec] border-[#274548] text-[#274548]",
   };
   return (
-    <div className={`flex items-center justify-center h-6 px-2 rounded-[4px] border text-[13px] font-medium whitespace-nowrap shrink-0 ${styles[color]}`}>
+    <div className={`flex items-center justify-center h-6 px-2 rounded-[4px] border text-[14px] font-medium whitespace-nowrap shrink-0 ${styles[color]}`}>
       {label}
     </div>
   );
 }
+
+/* ─── Issue Card & Row ────────────────────────────────── */
 
 type IssueSeverity = "red" | "yellow" | "none";
 function IssueCard({
@@ -318,40 +383,72 @@ function IssueCard({
   );
 }
 
-function IssueRow({ label, count }: { label: string; count: string }) {
+function IssueRow({ label, count, color = "red" }: { label: string; count: string; color?: "red" | "warning" }) {
+  const countColor = color === "red" ? "text-[#dc2626]" : "text-[#ca8a04]";
+  const hoverBg = color === "red" ? "hover:bg-[#fef2f2]" : "hover:bg-[#fefce8]";
   return (
-    <div className="flex items-center gap-4 h-8 w-full px-3 -mx-3 rounded-lg hover:bg-[#fef2f2] cursor-pointer transition-colors duration-100 group">
-      <span className="flex-1 text-[16px] text-[#404040] leading-[22px] tracking-[0.35px]">{label}</span>
-      <div className="flex items-center gap-4 shrink-0">
-        <span className="text-[14px] font-medium text-[#dc2626] whitespace-nowrap">{count}</span>
-        <span className="text-[14px] font-semibold text-[#dc2626] underline whitespace-nowrap">Fix</span>
+    <div className={`flex items-center gap-4 h-8 px-1 rounded-lg cursor-pointer transition-colors duration-100 ${hoverBg}`}>
+      <span className="flex-1 text-[14px] font-medium text-[#404040] leading-5 tracking-[0.3px]">{label}</span>
+      <div className="flex items-center gap-1 shrink-0">
+        <span className={`text-[14px] font-medium whitespace-nowrap ${countColor}`}>{count}</span>
+        <IconArrowRight className={`w-4 h-4 ${countColor}`} />
       </div>
     </div>
   );
 }
 
+/* ─── Section Label ───────────────────────────────────── */
+
 function SectionLabel({ label }: { label: string }) {
   return (
-    <span className="text-[11px] font-semibold uppercase tracking-[0.3px] text-[#737373] leading-4">{label}</span>
+    <span className="text-[12px] font-semibold uppercase tracking-[0.3px] text-[#737373] leading-4">{label}</span>
   );
 }
 
-function PayRunRow({ label, value, valueColor }: { label: string; value: string; valueColor?: string }) {
+/* ─── Right Sidebar Components ────────────────────────── */
+
+function StatusKpiCard({ label, value, dotColor }: { label: string; value: string; dotColor: "amber" | "green" }) {
   return (
-    <div className="flex items-center justify-between">
-      <span className="text-[14px] text-[#404040] leading-5">{label}</span>
-      <span className={`text-[14px] font-medium leading-5 ${valueColor ?? "text-[#171717]"}`}>{value}</span>
+    <div className="flex-1 bg-white border border-[#e5e5e5] rounded-xl p-4 flex flex-col gap-1 min-w-0">
+      <span className="text-[12px] font-semibold uppercase tracking-[0.3px] text-[#737373] leading-4">{label}</span>
+      <div className="flex items-center gap-2 h-6">
+        <StatusDot color={dotColor} />
+        <span className="text-[14px] font-medium text-[#171717] tracking-[0.3px] leading-5">{value}</span>
+      </div>
     </div>
   );
 }
 
-function ReminderRow({ label, date, checked, onToggle }: { label: string; date: string; checked: boolean; onToggle: () => void }) {
+function PayRunStep({ label, sublabel, active, isLast }: { label: string; sublabel?: string; active?: boolean; isLast?: boolean }) {
+  return (
+    <div className="flex items-start gap-3">
+      <div className="flex flex-col items-center shrink-0 w-[18px] self-stretch">
+        <div className="mt-[3px] shrink-0">
+          {active ? (
+            <div className="w-[18px] h-[18px] rounded-full border-2 border-[#f77445] flex items-center justify-center">
+              <div className="w-2.5 h-2.5 rounded-full bg-[#f77445]" />
+            </div>
+          ) : (
+            <div className="w-[18px] h-[18px] rounded-full border border-[#a3a3a3] bg-white" />
+          )}
+        </div>
+        {!isLast && <div className="w-px bg-[#d4d4d4] flex-1 mt-1" />}
+      </div>
+      <div className={`flex flex-col min-w-0 ${!isLast ? "pb-4" : ""}`}>
+        <span className={`text-[14px] font-medium leading-5 tracking-[0.3px] ${active ? "text-[#171717]" : "text-[#737373]"}`}>{label}</span>
+        {sublabel && <span className="text-[14px] font-medium text-[#ca8a04] leading-5 tracking-[0.3px]">{sublabel}</span>}
+      </div>
+    </div>
+  );
+}
+
+function ReminderRow({ label, date, checked, onToggle, dateRed }: { label: string; date: string; checked: boolean; onToggle: () => void; dateRed?: boolean }) {
   return (
     <div className="flex items-center gap-2 h-14 px-5 border-b border-[#e5e5e5] hover:bg-[#F5F5F5] transition-colors duration-100 cursor-pointer" onClick={onToggle}>
       <button
         type="button"
         onClick={(e) => { e.stopPropagation(); onToggle(); }}
-        className={`w-5 h-5 rounded-full border-2 shrink-0 flex items-center justify-center transition-colors duration-150 ${checked ? "border-[#f77445] bg-[#f77445]" : "border-[#a3a3a3] bg-white"}`}
+        className={`w-5 h-5 rounded-full border shrink-0 flex items-center justify-center transition-colors duration-150 ${checked ? "border-[#f77445] bg-[#f77445]" : "border-[#a3a3a3] bg-white"}`}
       >
         {checked && (
           <svg viewBox="0 0 12 12" fill="none" className="w-3 h-3">
@@ -359,17 +456,19 @@ function ReminderRow({ label, date, checked, onToggle }: { label: string; date: 
           </svg>
         )}
       </button>
-      <span className={`flex-1 text-[14px] leading-5 transition-colors duration-150 ${checked ? "line-through text-[#a3a3a3]" : "text-[#171717]"}`}>{label}</span>
-      <span className="text-[13px] font-medium text-[#404040] text-right w-16 leading-5 whitespace-nowrap">{date}</span>
+      <span className={`flex-1 text-[14px] leading-5 tracking-[0.3px] transition-colors duration-150 ${checked ? "line-through text-[#a3a3a3]" : "text-[#171717]"}`}>{label}</span>
+      <span className={`text-[14px] font-medium text-right w-[80px] leading-5 whitespace-nowrap ${dateRed ? "text-[#dc2626]" : "text-[#737373]"}`}>{date}</span>
     </div>
   );
 }
 
+/* ─── Dashboard ───────────────────────────────────────── */
+
 export default function Dashboard() {
   const [reminders, setReminders] = useState([
-    { id: 1, label: "Review FPS", date: "Today", checked: false },
-    { id: 2, label: "Add George as new starter", date: "28/03/26", checked: false },
-    { id: 3, label: "Review pension", date: "28/03/26", checked: false },
+    { id: 1, label: "Review FPS", date: "Today", checked: false, dateRed: true },
+    { id: 2, label: "Add George as new starter", date: "28/03/26", checked: false, dateRed: false },
+    { id: 3, label: "Review pension", date: "28/03/26", checked: false, dateRed: false },
   ]);
 
   const toggleReminder = (id: number) => {
@@ -397,39 +496,16 @@ export default function Dashboard() {
               </p>
             </div>
             <button className="flex items-center justify-center h-10 px-4 rounded-full bg-[#f77445] text-white text-[16px] font-medium tracking-[0.35px] whitespace-nowrap shrink-0 hover:bg-[#f44c1b] transition-colors duration-150">
-              Submit Payroll
+              Payroll
             </button>
           </div>
 
-          {/* KPI cards — above the alert */}
+          {/* KPI cards */}
           <div className="flex gap-2 items-stretch">
-            <KpiCard label="Total Workers" value="13,197" />
+            <KpiCard label="Active Workers" value="108" />
             <KpiCard label="Starters This Week" value="22" />
-            <KpiCard label="Workers Paid" value="5" />
-            <KpiCard label="FPS Status">
-              <div className="flex items-center gap-2 h-7 mt-0.5">
-                <StatusDot color="amber" />
-                <span className="text-[16px] font-semibold text-[#171717] tracking-[0.35px] leading-[22px]">Pending</span>
-              </div>
-            </KpiCard>
-            <KpiCard label="EPS Status">
-              <div className="flex items-center gap-2 h-7 mt-0.5">
-                <StatusDot color="green" />
-                <span className="text-[16px] font-semibold text-[#171717] tracking-[0.35px] leading-[22px]">Submitted</span>
-              </div>
-            </KpiCard>
-          </div>
-
-          {/* Alert banner — grey bg, semibold, 54px, specs from Figma node 136:1404 */}
-          <div className="bg-[#f5f5f5] rounded-xl flex items-start gap-2 pl-4 pr-5 py-4 min-h-[54px]">
-            <svg className="w-5 h-5 shrink-0 text-[#dc2626] mt-0.5" viewBox="0 0 20 20" fill="currentColor">
-              <circle cx="10" cy="10" r="9" />
-              <path d="M10 6v4.5" stroke="white" strokeWidth="1.75" strokeLinecap="round" />
-              <circle cx="10" cy="14" r="0.9" fill="white" />
-            </svg>
-            <span className="text-[16px] font-semibold text-[#171717] tracking-[0.35px] leading-[22px]">
-              3 blocking issues need resolving before payroll can run.
-            </span>
+            <KpiCard label="Leavers" value="4" />
+            <KpiCard label="Paid Workers" value="103" />
           </div>
 
           {/* Two-column layout */}
@@ -443,16 +519,16 @@ export default function Dashboard() {
                 <SectionLabel label="Critical" />
                 <IssueCard
                   severity="red"
-                  title="Unable to pay"
+                  title="Unable to pay workers"
                   tag="11 errors"
                   tagColor="red"
-                  description="Workers cannot be paid this run. Resolve each issue below."
+                  description="3 blocking issues must be resolved before payroll can run."
                   noCardHover
                 >
                   <div className="flex flex-col gap-0">
-                    <IssueRow label="Missing timesheets" count="5 workers" />
-                    <IssueRow label="RTI errors" count="3 errors" />
-                    <IssueRow label="Missing or invalid bank details" count="3 workers" />
+                    <IssueRow label="Outstanding timesheets" count="5 workers" color="red" />
+                    <IssueRow label="RTI errors" count="3 errors" color="red" />
+                    <IssueRow label="Missing or invalid bank details" count="3 workers" color="red" />
                   </div>
                 </IssueCard>
               </div>
@@ -463,10 +539,19 @@ export default function Dashboard() {
                 <IssueCard
                   severity="yellow"
                   title="Compliance flags"
-                  tag="15 flags"
+                  tag="19 flags"
                   tagColor="yellow"
-                  description="Right to Work, AWR, IR35, Holiday pay."
-                />
+                  description="Compliance issues found. Action required to avoid claims and penalties."
+                  noCardHover
+                >
+                  <div className="flex flex-col gap-0">
+                    <IssueRow label="Right to Work expiries" count="8 workers" color="warning" />
+                    <IssueRow label="AWR approaching week 12" count="4 workers" color="warning" />
+                    <IssueRow label="IR35 status not determined" count="2 placements" color="warning" />
+                    <IssueRow label="Holiday pay anomalies" count="1 worker" color="warning" />
+                    <IssueRow label="P45s not yet issued" count="4 workers" color="warning" />
+                  </div>
+                </IssueCard>
                 <IssueCard
                   severity="yellow"
                   title="Contracts unsigned"
@@ -489,66 +574,51 @@ export default function Dashboard() {
                 <IssueCard
                   severity="none"
                   title="JSL submissions"
-                  tag="Pending"
+                  tag="Due in 19 days"
                   tagColor="teal"
-                  description="Evidence uploads required for HMRC, due end of month."
+                  description="Upload the required evidence for HMRC."
                 />
                 <IssueCard
                   severity="none"
                   title="HMRC payment"
-                  tag="Pending"
+                  tag="Due in 7 days"
                   tagColor="teal"
-                  description="Due every 20th of each month."
+                  description="PAYE and NI payment due."
                 />
               </div>
             </div>
 
             {/* Right column */}
-            <div className="flex flex-col gap-4 w-[340px] shrink-0 pt-6">
+            <div className="flex flex-col gap-4 w-[360px] shrink-0 mt-6">
+
+              {/* FPS / EPS status */}
+              <div className="flex gap-2">
+                <StatusKpiCard label="FPS Status" value="Pending" dotColor="amber" />
+                <StatusKpiCard label="EPS Status" value="Approved" dotColor="green" />
+              </div>
 
               {/* Current pay run */}
               <div className="bg-white border border-[#e5e5e5] rounded-xl overflow-hidden">
-                <div className="flex items-center justify-between px-5 py-4 border-b border-[#e5e5e5]">
-                  <span className="text-[15px] font-semibold text-[#171717] tracking-[0.2px]">Current pay run</span>
-                  <span className="text-[13px] font-medium text-[#737373]">Tax month 12</span>
+                <div className="flex items-center justify-between px-5 py-5 border-b border-[#e5e5e5]">
+                  <span className="text-[18px] font-semibold text-[#171717] tracking-[0.2px] leading-6">Current pay run</span>
+                  <span className="text-[14px] font-medium text-[#404040] tracking-[0.3px]">Tax month 12</span>
                 </div>
-                {/* Next pay date highlight */}
-                <div className="flex items-center justify-between px-5 py-3 bg-[#f0fdf4] border-b border-[#e5e5e5]">
-                  <span className="text-[13px] font-medium text-[#404040]">Next pay date</span>
-                  <span className="text-[13px] font-semibold text-[#171717]">14 March 2026</span>
-                </div>
-                {/* Stats */}
-                <div className="px-5 py-4 flex flex-col gap-2.5 border-b border-[#e5e5e5]">
-                  <PayRunRow label="Workers in run" value="45" />
-                  <PayRunRow label="Excluded" value="11 workers" valueColor="text-[#dc2626]" />
-                  <PayRunRow label="Timesheets" value="51 / 56" valueColor="text-[#eab308]" />
-                </div>
-                {/* Financials */}
-                <div className="px-5 py-4 flex flex-col gap-2.5">
-                  <PayRunRow label="Gross pay" value="£187,240" />
-                  <PayRunRow label="Net pay" value="£141,450" />
-                  <PayRunRow label="HMRC liability" value="£61,710" />
-                  <PayRunRow label="Total pension" value="£9,840" />
-                </div>
-              </div>
-
-              {/* Last pay run */}
-              <div className="bg-white border border-[#e5e5e5] rounded-xl overflow-hidden">
-                <div className="flex items-center justify-between px-5 py-4 border-b border-[#e5e5e5]">
-                  <span className="text-[15px] font-semibold text-[#171717] tracking-[0.2px]">Last pay run</span>
-                  <span className="text-[13px] font-medium text-[#737373]">7 March 2026</span>
-                </div>
-                <div className="px-5 py-4 flex flex-col gap-2.5">
-                  <PayRunRow label="Workers paid" value="56" />
-                  <PayRunRow label="Gross pay" value="£183,040" />
-                  <PayRunRow label="Net pay" value="£138,350" />
+                <div className="px-5 py-5 flex flex-col">
+                  <PayRunStep label="Timesheets" sublabel="103 out of 108" active />
+                  <PayRunStep label="Processing" />
+                  <PayRunStep label="Awaiting approval" />
+                  <PayRunStep label="Review" />
+                  <PayRunStep label="Payday (31 March 2026)" isLast />
+                  <button disabled className="w-full h-10 rounded-full bg-[#e5e5e5] text-[16px] font-medium text-[#a3a3a3] tracking-[0.35px] cursor-not-allowed mt-8">
+                    Run Payroll
+                  </button>
                 </div>
               </div>
 
               {/* Reminders */}
               <div className="bg-white border border-[#e5e5e5] rounded-xl overflow-hidden">
-                <div className="flex items-center justify-between px-5 py-4 border-b border-[#e5e5e5]">
-                  <span className="text-[15px] font-semibold text-[#171717] tracking-[0.2px]">Reminders</span>
+                <div className="flex items-center justify-between px-5 py-5 border-b border-[#e5e5e5]">
+                  <span className="text-[18px] font-semibold text-[#171717] tracking-[0.2px] leading-6">Reminders</span>
                 </div>
                 {reminders.map((r) => (
                   <ReminderRow
@@ -557,9 +627,10 @@ export default function Dashboard() {
                     date={r.date}
                     checked={r.checked}
                     onToggle={() => toggleReminder(r.id)}
+                    dateRed={r.dateRed}
                   />
                 ))}
-                <div className="px-5 py-4">
+                <div className="px-5 py-5 border-b border-[#e5e5e5]">
                   <button className="w-full h-10 rounded-full border border-[#a3a3a3] bg-white text-[16px] font-medium text-[#171717] tracking-[0.35px] hover:bg-[#F5F5F5] hover:border-[#737373] transition-colors duration-150">
                     Add reminder
                   </button>

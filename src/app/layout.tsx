@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "RTI-v2",
+  title: "agency-dashboard-v2",
   description: "",
 };
 
